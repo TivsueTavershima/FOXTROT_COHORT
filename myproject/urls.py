@@ -15,11 +15,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from myproject import views
 #from.views import Say_something
 # from django.conf.urls.static import static
 # from django.conf import settings
+from market import urls as market_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,7 +31,8 @@ urlpatterns = [
     path('csv/',views.csv_func),
     path('img/',views.img_func),
     path('pdf/',views.pdf_func),
-    path('vid/',views.Vid_func)
+    path('vid/',views.Vid_func),
+    path('market/',include(market_urls))
 ]
 
 # if settings.DEBUG:
