@@ -17,9 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from myproject import views
-#from.views import Say_something
-# from django.conf.urls.static import static
-# from django.conf import settings
+from.views import Say_something
+from django.conf.urls.static import static
+from django.conf import settings
 from market import urls as market_urls
 
 urlpatterns = [
@@ -35,5 +35,5 @@ urlpatterns = [
     path('market/',include(market_urls))
 ]
 
-# if settings.DEBUG:
-#     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+if settings.DEBUG:
+     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

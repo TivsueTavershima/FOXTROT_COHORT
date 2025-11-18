@@ -58,9 +58,63 @@ market_product = [
 
 # ====== VIEW: GET ALL PRODUCTS ====== #
 def get_product(request):
-    return JsonResponse(
-        {
-            "message": "Get Products Successful",
-            "products": market_product
-        },
-    )
+    if request.method == 'GET':
+        category = request.GET.get('category')
+           #print(category, "CATEGORY")
+        filtered_products = []    
+        if category != None:
+            for product in market_product:
+                if category == product['category']:
+                    filtered_products.append(product)
+                else:
+                    if len(filtered_products) == 0:
+                        return JsonResponse({"what you are looking for is not available"}, status=400)
+                    return JsonResponse({"message": "Get products successful", "products": filtered_products}, status=200)
+        else:
+                    return JsonResponse({"message": "Get product successful", "products": market_product}, status=200)
+    else:
+        return JsonResponse({'message': 'invalid request method'}, status=405)
+    
+    
+    
+def create_product(request):
+        if request.method == 'POST':
+     # requset. body # bytes format
+            incoming_data = request.body.decode()
+            to_dict = json.loads(incoming_data)
+            
+            print(to_dict)
+            market_product.append({"id":len(market_product) +1, **to_dict})
+            return JsonResponse({'message': 'product created succesful'} , status=201)
+            
+            
+            
+def update_product(request, id):
+        if request.method == 'PUT':
+            # REUQEST.BODY # BYTES FORMAT
+            incoming_data = request.body.decode() # STRING FORMAT
+            to_dict = json.loads(incoming_data) #dictionary format
+            for product in market_product:
+                if id == product["id"]:
+                    product["name"] = to_dict["name"]
+                    product["category"] = to_dict["category"]
+                    product["price"] = to_dict["price"]
+                    product["stock"] = to_dict["stock"]
+                    product["description"] = to_dict["description"]
+                    
+            return JsonResponse({'message': 'product updated succesful'} , status=201)
+        else:
+            return JsonResponse({'message': 'invalid request method'}, status=405)            
+                    
+                    
+def delete_product(request, id):
+            if request.method == 'DELETE':
+                market_product.pop(id - 1)
+                print(market_product)
+                return JsonResponse(data=None,safe=False, status=200)
+            else:
+                 return JsonResponse({'message': 'you are using the wrong method'}, status=405) 
+                
+                    
+            
+            
